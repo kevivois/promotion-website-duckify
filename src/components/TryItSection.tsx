@@ -150,82 +150,102 @@ function TryItSection() {
   };
 
   return (
-    <section className="relative px-6 pb-24">
-      <div className="mx-auto max-w-7xl rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-slate-950/90 via-slate-900/70 to-cyan-950/25 p-6 md:p-8">
-        <div className="mb-6 text-center">
-          <h2 className="text-4xl font-bold text-white md:text-5xl">
-            Try It <span className="bg-gradient-to-r from-cyan-300 via-emerald-300 to-cyan-300 bg-clip-text text-transparent">Now</span>
+    <section className="relative py-24 md:py-32">
+      <div className="mx-auto max-w-[1400px] px-8 md:px-16">
+        <div className="mb-16 md:mb-24">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-1 h-1 bg-[#FF6B35]" />
+            <span className="mono text-[11px] tracking-widest text-white/40 uppercase">Interactive Demo</span>
+          </div>
+          <h2 className="text-[clamp(2.5rem,6vw,5rem)] font-black leading-[0.95] tracking-tighter text-white">
+            GENERATE<br />PROTOTYPE
           </h2>
-          <p className="mx-auto mt-3 max-w-3xl text-gray-300">
-            Want to have your dream duck be real ?
-          </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-            <form onSubmit={onSubmit} className="space-y-4">
-              <label htmlFor="try-it-prompt" className="block text-sm font-medium text-gray-200">
-                Describe your 3D character
-              </label>
-              <textarea
-                id="try-it-prompt"
-                value={prompt}
-                onChange={(event) => setPrompt(event.target.value)}
-                rows={5}
-                className="w-full rounded-xl border border-white/15 bg-slate-950/80 px-4 py-3 text-gray-100 outline-none transition focus:border-cyan-300/60"
-                placeholder="A duck hired as a doctor"
-              />
-
-              <button
-                type="submit"
-                className="inline-flex items-center rounded-xl bg-cyan-400 px-5 py-2.5 font-semibold text-slate-950 transition hover:bg-cyan-300"
-              >
-                Try It
-              </button>
-            </form>
-
-            <p className="mt-4 text-sm text-cyan-100">{statusLabel}</p>
-
-            <div className="mt-5 flex flex-wrap gap-2">
-              {PROMPT_SUGGESTIONS.map((suggestion) => (
-                <button
-                  key={suggestion}
-                  type="button"
-                  onClick={() => setPrompt(suggestion)}
-                  className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-gray-300 transition hover:border-cyan-300/60 hover:text-white"
-                >
-                  {suggestion}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            {(state === 'thinking' || state === 'rendering') && !selectedModel ? (
-              <div className="flex h-full min-h-[446px] flex-col items-center justify-center rounded-3xl border border-cyan-300/30 bg-slate-900/60 p-6 text-center">
-                <div className="h-12 w-12 animate-spin rounded-full border-4 border-cyan-200/25 border-t-cyan-300" />
-                <p className="mt-5 text-lg font-semibold text-cyan-100">Generating your 3D preview</p>
-                <p className="mt-2 text-sm text-gray-300">{state === 'thinking' ? 'Analyzing prompt...' : 'Rendering model from preset library...'}</p>
-                <div className="mt-6 h-2 w-full max-w-xs overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className={`h-full rounded-full bg-cyan-300 transition-all duration-500 ${
-                      state === 'thinking' ? 'w-1/3' : 'w-4/5'
-                    }`}
+        <div className="border border-white/5 bg-[#0a0a0a]">
+          <div className="grid lg:grid-cols-2">
+            <div className="border-b lg:border-b-0 lg:border-r border-white/5 p-8 md:p-12">
+              <form onSubmit={onSubmit} className="space-y-8">
+                <div>
+                  <label htmlFor="try-it-prompt" className="mono text-[10px] tracking-widest text-white/40 uppercase mb-4 block">
+                    Input Prompt
+                  </label>
+                  <textarea
+                    id="try-it-prompt"
+                    value={prompt}
+                    onChange={(event) => setPrompt(event.target.value)}
+                    rows={4}
+                    className="w-full bg-transparent border-none text-white mono text-sm leading-relaxed outline-none resize-none pb-4 border-b border-white/10 focus:border-[#FF6B35]/40 transition-colors placeholder:text-white/20"
+                    placeholder="Enter character description..."
                   />
                 </div>
+
+                <div className="flex items-center justify-between pt-4">
+                  <button
+                    type="submit"
+                    className="group relative bg-[#FF6B35] text-black mono text-xs tracking-wider px-8 py-3 font-semibold transition-all hover:bg-white"
+                  >
+                    EXECUTE
+                  </button>
+
+                  <div className="mono text-[10px] text-white/30">
+                    {statusLabel}
+                  </div>
+                </div>
+              </form>
+
+              <div className="mt-12 pt-8 border-t border-white/5">
+                <div className="mono text-[10px] tracking-widest text-white/40 uppercase mb-4">Quick Select</div>
+                <div className="flex flex-wrap gap-2">
+                  {PROMPT_SUGGESTIONS.map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      type="button"
+                      onClick={() => setPrompt(suggestion)}
+                      className="mono text-[10px] border border-white/10 px-3 py-1.5 text-white/40 transition-colors hover:border-[#FF6B35]/40 hover:text-white/60"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
               </div>
-            ) : selectedModel ? (
-              <ModelWidget
-                title={selectedModel.title}
-                modelPath={selectedModel.modelPath}
-                caption="Selected from preset demo library"
-                view={TRY_IT_VIEW}
-              />
-            ) : (
-              <div className="flex h-full min-h-[446px] items-center justify-center rounded-3xl border border-dashed border-white/20 bg-slate-900/40 p-6 text-center text-gray-400">
-                Submit a prompt to reveal a generated-style preview.
-              </div>
-            )}
+            </div>
+
+            <div className="p-8 md:p-12 min-h-[500px] flex items-center justify-center">
+              {(state === 'thinking' || state === 'rendering') && !selectedModel ? (
+                <div className="flex flex-col items-center justify-center w-full">
+                  <div className="relative w-16 h-16 mb-8">
+                    <div className="absolute inset-0 border border-white/10" />
+                    <div className="absolute inset-0 border-t border-[#FF6B35] animate-spin" />
+                  </div>
+                  <p className="mono text-xs text-white/60 mb-2">
+                    {state === 'thinking' ? 'PROCESSING INPUT' : 'GENERATING MODEL'}
+                  </p>
+                  <div className="w-64 h-[1px] bg-white/5 relative overflow-hidden mt-4">
+                    <div
+                      className="absolute h-full bg-[#FF6B35] transition-all duration-500"
+                      style={{ width: state === 'thinking' ? '33%' : '80%' }}
+                    />
+                  </div>
+                </div>
+              ) : selectedModel ? (
+                <div className="w-full">
+                  <ModelWidget
+                    title={selectedModel.title}
+                    modelPath={selectedModel.modelPath}
+                    caption="Preset library selection"
+                    view={TRY_IT_VIEW}
+                  />
+                </div>
+              ) : (
+                <div className="text-center">
+                  <div className="w-12 h-12 border border-dashed border-white/10 mx-auto mb-4" />
+                  <p className="mono text-xs text-white/30">
+                    AWAITING INPUT
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
